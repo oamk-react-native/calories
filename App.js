@@ -1,8 +1,8 @@
 import React,{useState} from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, Platform } from 'react-native';
 import {Picker} from '@react-native-picker/picker'; // https://github.com/react-native-picker/picker
 import RadioForm from 'react-native-simple-radio-button'; // https://www.npmjs.com/package/react-native-simple-radio-button
-
+import DropDownPicker from 'react-native-dropdown-picker';
 
 export default function App() {
   const [weight, setWeight] = useState(0);
@@ -43,8 +43,9 @@ export default function App() {
           placeholder="in kilograms" 
           keyboardType='numeric'></TextInput>
       </View>
-      <View style={styles.field}>
+     {/*  <View style={styles.field}> */}
         <Text> Intensity</Text>
+        {Platform.OS === 'android' && (
         <Picker style={styles.intensity}
             onValueChange={(itemValue) => setIntensity(itemValue)}
             selectedValue={intensity}
@@ -54,7 +55,21 @@ export default function App() {
             ))
           }
         </Picker>
-      </View>
+        )}
+        {Platform.OS === 'ios' && (
+          <DropDownPicker
+          items={intensities}
+          defaultValue={intensity}
+          containerStyle={{height: 40}}
+          style={{backgroundColor: '#fafafa'}}
+          itemStyle={{
+              justifyContent: 'flex-start'
+          }}
+          dropDownStyle={{backgroundColor: '#fafafa'}}
+          onChangeItem={item => setIntensity(item.value)}
+        />
+        )}
+      {/* </View> */}
       <View style={styles.field}>
       <Text>Gender</Text>
       <RadioForm
